@@ -2,15 +2,12 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                git 'https://github.com/devashih/netflix.git'
-            }
-        }
-
         stage('Build Image') {
             steps {
-                sh 'docker build -t yourdockerhub/netflix-clone:latest .'
+                sh '''
+                cd frontend
+                docker build -t yourdockerhub/netflix-clone:latest .
+                '''
             }
         }
 
