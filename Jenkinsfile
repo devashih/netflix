@@ -5,8 +5,8 @@ pipeline {
         stage('Build Image') {
             steps {
                 sh '''
-                cd frontend
-                docker build -t yourdockerhub/netflix-clone:latest .
+                cd client
+                docker build -t yourdockerhub/netflix-client:latest .
                 '''
             }
         }
@@ -16,7 +16,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'dockerhub-pass', variable: 'PASS')]) {
                     sh '''
                     echo $PASS | docker login -u yourdockerhub --password-stdin
-                    docker push yourdockerhub/netflix-clone:latest
+                    docker push yourdockerhub/netflix-client:latest
                     '''
                 }
             }
@@ -25,8 +25,8 @@ pipeline {
         stage('Deploy Container') {
             steps {
                 sh '''
-                docker rm -f netflix || true
-                docker run -d -p 3000:3000 --name netflix yourdockerhub/netflix-clone:latest
+                docker rm -f netflix-client || true
+                docker run -d -p 3000:3000 --name netflix-client yourdockerhub/netflix-client:latest
                 '''
             }
         }
